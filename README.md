@@ -17,7 +17,7 @@ It does not count notes outside your keyboard's range and warns you if you need 
 
 ## Finding songs
 
-I found <onlinesequencer.net> to be quite a good source for new tracks.
+I found <https://onlinesequencer.net> to be quite a good source for new tracks.
 
 The search function ranks the tracks weirdly so i used my search engine to find songs on the site:
 
