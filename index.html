@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Piano Practice</title>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/controls.css">
+<link rel="stylesheet" href="css/topbar.css">
+<link rel="stylesheet" href="css/menus.css">
+<link rel="stylesheet" href="css/stage.css">
+<script defer src="js/util.js"></script>
+<script defer src="js/state.js"></script>
+<script defer src="js/synth.js"></script>
+<script defer src="js/midi-file.js"></script>
+<script defer src="js/songs.js"></script>
+<script defer src="js/keyboard-window.js"></script>
+<script defer src="js/game.js"></script>
+<script defer src="js/scoring.js"></script>
+<script defer src="js/hud.js"></script>
+<script defer src="js/render.js"></script>
+<script defer src="js/keyboard.js"></script>
+<script defer src="js/midi-input.js"></script>
+<script defer src="js/ui.js"></script>
+<script defer src="js/main.js"></script>
+</head>
+<body>
+
+<header id="bar">
+  <div class="grp left">
+    <label class="btn" title="Open a .mid / .midi file (or drop it anywhere on the page)">Open MIDI<input type="file" id="file" accept=".mid,.midi,audio/midi,audio/x-midi"></label>
+    <select id="builtin" title="Song">
+      <option value="" id="curSong">No song loaded</option>
+      <optgroup label="Built-in songs">
+        <option value="scale">C major scale (warm-up)</option>
+        <option value="triads">Triads: C – F – G – C</option>
+        <option value="ode">Ode to Joy (Beethoven)</option>
+      </optgroup>
+    </select>
+    <button id="playBtn" class="primary">Start</button>
+    <button id="restartBtn" title="Restart (R)">↺</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><label>Accuracy</label><span id="acc">—</span></div>
+    <div class="stat"><label>Combo</label><span id="combo">0</span></div>
+    <div class="stat main"><label>Score</label><span id="score">0</span><small id="scoreMax">of 0</small></div>
+    <div class="stat"><label>Notes</label><span id="notesCount">0 / 0</span></div>
+    <div class="stat last"><label>Last note</label><span id="last">—</span></div>
+  </div>
+
+  <div class="grp right">
+    <div class="pop">
+      <button id="gameBtn" aria-expanded="false" aria-controls="gameMenu">Game settings <span class="caret">▼</span></button>
+      <div class="menu" id="gameMenu" hidden>
+        <h3>Playback</h3>
+        <div class="slider"><div class="fill"></div><span>Speed</span><output id="speedOut">100%</output><input type="range" id="speed" min="25" max="150" step="5" value="100" aria-label="Speed"></div>
+        <div class="slider"><div class="fill"></div><span>Lookahead</span><output id="lookOut">3 s</output><input type="range" id="look" min="1" max="6" step="0.5" value="3" aria-label="Lookahead"></div>
+        <div class="field"><label for="range">Keyboard</label><select id="range"><option value="fit">Fit to song</option><option value="61">61 keys</option><option value="88">88 keys</option></select></div>
+        <h3>Practice</h3>
+        <label class="tog"><input type="checkbox" id="waitMode"><span>Wait for me</span></label>
+        <label class="tog"><input type="checkbox" id="listen"><span>Listen</span></label>
+        <div class="slider"><div class="fill"></div><span>Listen volume</span><output id="lvolOut">100%</output><input type="range" id="lvol" min="0" max="100" step="5" value="100" aria-label="Listen volume"></div>
+        <label class="tog"><input type="checkbox" id="names" checked><span>Note names</span></label>
+        <h3>Parts</h3>
+        <div id="partsList"></div>
+      </div>
+    </div>
+    <div class="pop">
+      <button id="devBtn" aria-expanded="false" aria-controls="devMenu"><span class="dot" id="midiDot"></span><span id="devLabel">MIDI</span><span class="caret">▼</span></button>
+      <div class="menu" id="devMenu" hidden>
+        <h3>MIDI keyboard</h3>
+        <div class="status"><span class="dot" id="midiDot2"></span><span id="midiStatus">Checking…</span></div>
+        <ul id="midiList" hidden></ul>
+        <div class="field"><label for="midiInput">Input</label><select id="midiInput"><option value="all">All inputs</option></select></div>
+        <button id="midiRetry" hidden>Connect MIDI</button>
+        <h3>Sound</h3>
+        <label class="tog"><input type="checkbox" id="sound" checked><span>Key sound</span></label>
+        <h3>Keyboard window</h3>
+        <label class="tog"><input type="checkbox" id="winOn"><span>Dynamic keyboard window</span></label>
+        <div class="field"><label for="winOct">Keyboard size</label><select id="winOct"><option value="2">2 octaves (25 keys)</option><option value="3">3 octaves (37 keys)</option><option value="4">4 octaves (49 keys)</option><option value="5">5 octaves (61 keys)</option></select></div>
+        <h3>Computer keyboard</h3>
+        <label class="tog"><input type="checkbox" id="letters" checked><span>Key letters</span></label>
+        <div class="field"><label>Octave</label><div class="oct"><button id="octDown" title="Octave down (↓)">−</button><output id="octOut">C4</output><button id="octUp" title="Octave up (↑)">+</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="progress" title="Click to start from this point"><div id="progressFill"></div></div>
+</header>
+
+<main id="stage">
+  <canvas id="cv"></canvas>
+
+  <div id="results" class="modal hidden">
+    <div class="card">
+      <div class="small" id="rSong"></div>
+      <div class="grade" id="rGrade">A</div>
+      <div class="rscore"><span id="rScore">0</span> <small id="rMax">/ 0</small></div>
+      <div class="small" id="rMode"></div>
+      <div class="rgrid">
+        <div><label>Accuracy</label><span id="rAcc">0%</span></div>
+        <div><label>Best combo</label><span id="rCombo">0</span></div>
+        <div><label>Wrong keys</label><span id="rWrong">0</span></div>
+        <div><label style="color:#ffd166">Perfect</label><span id="rPerfect">0</span></div>
+        <div><label style="color:#4ee38b">Great</label><span id="rGreat">0</span></div>
+        <div><label style="color:#5ad1ff">Good</label><span id="rGood">0</span></div>
+        <div><label style="color:#b59cff">Okay</label><span id="rOkay">0</span></div>
+        <div><label style="color:#ff5a6e">Miss</label><span id="rMiss">0</span></div>
+        <div><label>Notes</label><span id="rNotes">0</span></div>
+      </div>
+      <div id="rBest"></div>
+      <div class="row"><button id="rAgain" class="primary big">↺ Play again</button><button id="rClose" class="big">Close</button></div>
+    </div>
+  </div>
+
+  <div id="winWarn" hidden></div>
+  <div id="drop">Drop your MIDI file</div>
+</main>
+<div id="toast"></div>
+</body>
+</html>

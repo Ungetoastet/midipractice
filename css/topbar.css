@@ -1,0 +1,18 @@
+/* Top bar: song controls, score stats, progress bar (incl. narrow-screen layout) */
+/* top bar */
+#bar{position:relative;display:flex;align-items:center;gap:16px;padding:10px 16px 14px;background:var(--bar);border-bottom:1px solid var(--line);z-index:5;user-select:none;-webkit-user-select:none}   /* no text selection; buttons and menus still work */
+.grp{display:flex;align-items:center;gap:8px}
+.grp.right{justify-content:flex-end}
+.stats{flex:1;display:flex;justify-content:center;align-items:flex-end;gap:26px;min-width:0}
+.stat{display:flex;flex-direction:column;align-items:center;min-width:58px}
+.stat label{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted)}
+.stat span{font-variant-numeric:tabular-nums;font-size:20px;font-weight:650;white-space:nowrap}
+.stat.main span{font-size:34px;font-weight:800;line-height:1.05;color:#fff}
+.stat.main small{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+#combo.bump{animation:bump .18s ease-out}
+@keyframes bump{50%{transform:scale(1.25)}}
+#progress{position:absolute;left:0;right:0;bottom:0;height:5px;background:#2a2a2a;cursor:pointer;transition:height .12s}
+#progress:hover{height:9px}
+#progressFill{height:100%;width:0;background:var(--accent)}
+@media (max-width:1180px){.stat.last{display:none}.stats{gap:16px}}
+@media (max-width:980px){#bar{flex-wrap:wrap}.stats{order:3;flex-basis:100%}.grp.right{margin-left:auto}}

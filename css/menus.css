@@ -1,0 +1,32 @@
+/* Popup menus: game settings, device settings, MIDI device list, parts list */
+/* popup menus */
+.pop{position:relative}
+.menu{position:absolute;top:calc(100% + 8px);right:0;width:340px;max-height:calc(100vh - 90px);overflow:auto;background:var(--panel);border:1px solid #333333;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.55);padding:6px 14px 14px;z-index:20}
+.menu h3{margin:12px 0 8px;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1.3px}
+.field{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13px}
+.field>label{width:104px;white-space:nowrap;color:#d0d0d0;flex:none}
+.field output{min-width:42px;text-align:right;font-variant-numeric:tabular-nums}
+.field select{flex:1;min-width:0}
+.tog{display:flex;align-items:center;gap:9px;margin:6px 0;padding:6px;border-radius:8px;cursor:pointer;user-select:none;font-size:13px}
+.tog:hover{background:#272727}
+.status{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.45;margin:4px 0 8px}
+.status .dot{margin-top:5px}
+#midiStatus{overflow-wrap:anywhere}
+#midiList{list-style:none;margin:0 0 10px;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+#midiList li.dev{padding:7px 10px 3px;font-size:13px;font-weight:600;border-top:1px solid var(--line)}
+#midiList li.dev:first-child{border-top:0}
+#midiList li.port{display:flex;align-items:center;gap:8px;padding:3px 10px 3px 12px;font-size:12.5px;color:#bdbdbd}
+#midiList li.dev+li.port{padding-top:4px}
+#midiList li.port.last{padding-bottom:8px}
+#midiList .act{width:6px;height:6px;border-radius:50%;background:#4a4a4a;flex:none;transition:background .25s}
+#midiList .act.on{background:#3b9eff;transition:none}
+#midiList .muted{color:#777}
+#midiRetry{width:100%;margin-top:4px}
+.oct{display:flex;align-items:center;gap:6px;flex:1}
+.oct button{padding:4px 12px}
+.oct output{flex:1;text-align:center}
+.part{display:flex;align-items:center;gap:10px;padding:6px 4px;border-radius:8px}
+.part .sw{width:12px;height:12px;border-radius:3px;flex:none}
+.part .nm{flex:1;min-width:0;font-size:13px}
+.part .nm b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.part .nm small{color:var(--muted)}

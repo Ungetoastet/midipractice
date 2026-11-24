@@ -1,0 +1,8 @@
+/* Colour palette, reset and page frame */
+:root{
+  --bg:#141414; --bar:#1a1a1a; --panel:#202020; --panel2:#2a2a2a; --line:#333333; --text:#e8e8e8; --muted:#999999;
+  --accent:#d6d6d6; --good:#4ee38b; --bad:#ff5a6e; --gold:#ffd166;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+body{display:flex;flex-direction:column}
